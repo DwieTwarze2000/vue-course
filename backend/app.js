@@ -5,6 +5,7 @@ const app = express();
 const url = 'https://uni-call.fcc-online.pl';
 
 var _bridge = null;
+const { Server } = require('socket.io');
 
 const configuration = { login: 'focus21', password: 'jfhgd7uhgdb', url: url };
 
@@ -19,17 +20,41 @@ app.use((req, res, next) => {
 app.use(bodyParser.text());
 app.use(bodyParser.json());
 
-app.post('/call', async (req, res) => {
+const server = app.listen(3000, function () {
+    console.log('Sitecall app listening on port 3000!');
+});
+
+const io = new Server(server);
+
+let currentStatus;
+app.post('/call', async function (req, res) {
     let data = req.body;
     _bridge = await dialer.call('514541201', data.number);
-    console.log('Calling...');
+
+    let interval = setInterval(async () => {
+        let status = await _bridge.getStatus();
+        console.log({ status });
+        if (currentStatus !== status) {
+            currentStatus = status;
+            io.emit('status', status);
+            console.log({ status });
+        }
+
+        if (
+            currentStatus === 'ANSWERED' ||
+            currentStatus === 'FAILED' ||
+            currentStatus === 'BUSY' ||
+            currentStatus === 'NO ANSWER'
+        ) {
+            console.log('stop');
+            clearInterval(interval);
+        }
+    }, 1000);
+
     res.json({ id: '123', status: _bridge.STATUSES.NEW });
 });
+
 app.get('/status', async function (req, res) {
     let status = await _bridge.getStatus();
     res.json({ id: '123', status: status });
-});
-
-app.listen(3000, () => {
-    console.log('Listening on port 3000');
 });
