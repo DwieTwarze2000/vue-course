@@ -3,10 +3,15 @@ import Start from '../views/Start.vue';
 import Ringing from '../views/Ringing.vue';
 import Connected from '../views/Connected.vue';
 import Answered from '../views/Answered.vue';
-
+import Login from '../views/Login.vue';
 const routes = [
     {
         path: '/',
+        name: 'login',
+        component: Login,
+    },
+    {
+        path: '/start',
         name: 'start',
         component: Start,
     },

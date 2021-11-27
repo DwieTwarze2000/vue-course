@@ -7,10 +7,6 @@ const url = 'https://uni-call.fcc-online.pl';
 var _bridge = null;
 const { Server } = require('socket.io');
 
-const configuration = { login: 'focus21', password: 'jfhgd7uhgdb', url: url };
-
-dialer.configure(configuration);
-
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept');
@@ -25,6 +21,15 @@ const server = app.listen(3000, function () {
 });
 
 const io = new Server(server);
+
+app.post('/login', async (req, res) => {
+    let data = req.body;
+    console.log(data);
+});
+
+const configuration = { login: 'focus21', password: 'jfhgd7uhgdb', url: url };
+
+dialer.configure(configuration);
 
 let currentStatus;
 app.post('/call', async function (req, res) {
