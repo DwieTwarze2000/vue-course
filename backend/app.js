@@ -1,4 +1,6 @@
 const express = require('express');
+const settingsData = require('./settings.json');
+fs = require('fs');
 const dialer = require('dialer').Dialer;
 const bodyParser = require('body-parser');
 const app = express();
@@ -22,19 +24,28 @@ const server = app.listen(3000, function () {
 
 const io = new Server(server);
 
-app.post('/login', async (req, res) => {
+app.post('/settings', async (req, res) => {
     let data = req.body;
-    console.log(data);
+    login = data.login;
+    password = data.password;
+    number = data.number.replace(/\s/g, '');
+    fs.writeFile('settings.json', `{"login":"${login}", "password":"${password}","number":"${number}"}`, (err) => {
+        if (err) return console.log(err);
+    });
 });
 
-const configuration = { login: 'focus21', password: 'jfhgd7uhgdb', url: url };
+app.get('/settings', (req, res) => {
+    res.json({ login: settingsData.login, password: settingsData.password, number: settingsData.number });
+});
+
+const configuration = { login: settingsData.login, password: settingsData.password, url: url };
 
 dialer.configure(configuration);
 
 let currentStatus;
 app.post('/call', async function (req, res) {
     let data = req.body;
-    _bridge = await dialer.call('514541201', data.number);
+    _bridge = await dialer.call(settingsData.number, data.number.replace(/\s/g, ''));
 
     let interval = setInterval(async () => {
         let status = await _bridge.getStatus();
