@@ -8,13 +8,13 @@ class ViewManager {
     changeView() {
         switch (this.status) {
             case 'CONNECTED':
-                router.push({ name: 'connected' });
+                router.push({ name: 'connected', params: { forwarded: true } });
                 break;
             case 'FAILED':
-                router.push({ name: 'failed' });
+                router.push({ name: 'failed', params: { forwarded: true } });
                 break;
             case 'ANSWERED':
-                router.push({ name: 'answered' });
+                router.push({ name: 'answered', params: { forwarded: true } });
         }
     }
     checkStatus() {

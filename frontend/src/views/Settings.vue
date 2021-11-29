@@ -4,16 +4,25 @@
             <div class="header clearfix">Ustawienia</div>
         </div>
         <div class="row">
-            <label class="form-label clearfix" for="form-login"> Login </label>
-            <input v-model="login" class="form-login clearfix" id="form-login" />
+            <div class="form-floating mb-3">
+                <input v-model="login" type="text" class="form-control" id="login" />
+                <label for="login">Login</label>
+            </div>
         </div>
         <div class="row">
-            <label class="form-label clearfix" for="form-pass"> Hasło </label>
-            <input v-model="password" class="form-login clearfix" id="form-pass" />
+            <div class="form-floating mb-3">
+                <input v-model="password" :type="isShowed ? 'text' : 'password'" class="form-control" id="password" />
+                <label for="password">Hasło</label>
+                <span class="eye" @click="ChangeInput()"
+                    ><i :class="{ fas: true, 'fa-eye': !isShowed, 'fa-eye-slash': isShowed }"></i
+                ></span>
+            </div>
         </div>
         <div class="row">
-            <label class="form-label clearfix" for="form-number"> Twój Numer Telefonu </label>
-            <input v-model="number" class="form-number clearfix" id="form-number" />
+            <div class="form-floating mb-3">
+                <input v-model="number" type="text" class="form-control" id="number" />
+                <label for="number">Twój numer telefonu</label>
+            </div>
         </div>
         <div class="row">
             <div class="call-button" @click="ChangeSettings()">Zapisz ustawienia</div>
@@ -27,6 +36,7 @@ export default {
             login: '',
             password: '',
             number: '',
+            isShowed: false,
         };
     },
     methods: {
@@ -38,6 +48,9 @@ export default {
                 },
                 body: JSON.stringify({ login: this.login, password: this.password, number: this.number }),
             });
+        },
+        ChangeInput() {
+            this.isShowed = !this.isShowed;
         },
     },
     mounted() {
@@ -53,4 +66,12 @@ export default {
     },
 };
 </script>
-<style></style>
+<style scoped>
+.fas {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+}
+</style>

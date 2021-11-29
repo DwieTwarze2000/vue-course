@@ -1,21 +1,59 @@
 <template>
     <div class="window">
-        <router-link to="/">Strona Główna</router-link>
-        <router-link to="/settings">Ustawienia</router-link>
+        <nav v-if="currentRouteName == 'start' || currentRouteName == 'settings'" className="navbar navbar-expand-lg ">
+            <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav">
+                    <li className="nav-item">
+                        <router-link active-class="active" class="nav-link" to="/"> Strona Główna </router-link>
+                    </li>
+                    <li className="nav-item">
+                        <router-link active-class="active" class="nav-link" to="/settings"> Ustawienia </router-link>
+                    </li>
+                </ul>
+            </div>
+        </nav>
         <router-view />
     </div>
 </template>
+<script>
+export default {
+    computed: {
+        currentRouteName() {
+            return this.$route.name;
+        },
+    },
+};
+</script>
+
 <style>
+.navbar {
+    background-color: darkgray;
+    border-radius: 12px;
+    color: black;
+}
+.nav-link {
+    color: black;
+}
+.nav-link:hover {
+    color: black;
+}
+.nav-link:visited {
+    color: black;
+}
+.active {
+    font-weight: bold;
+}
 .window {
-    width: 800px;
-    height: 500px;
+    width: 1000px;
+    height: 1000px;
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     margin: auto;
-    background: rgb(255, 204, 0);
+    /* background: rgb(255, 204, 0); */
+    background: lightgray;
     border-radius: 20px;
     box-sizing: border-box;
     padding: 20px;
@@ -73,7 +111,7 @@
     font-size: 22px;
     font-weight: 600;
     line-height: 75px;
-    background: #008000;
+    background: #636663;
     cursor: pointer;
     color: #fff;
     border-radius: 20px;
