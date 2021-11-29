@@ -3,7 +3,7 @@ fs = require('fs');
 const path = require('path');
 const settingsFile = 'settings.json';
 const settingDb = path.join(__dirname, settingsFile);
-
+const cors = require('cors');
 const dialer = require('dialer').Dialer;
 const bodyParser = require('body-parser');
 const app = express();
@@ -11,6 +11,8 @@ const url = 'https://uni-call.fcc-online.pl';
 
 var _bridge = null;
 const { Server } = require('socket.io');
+
+app.use(cors());
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -40,6 +42,7 @@ app.post('/settings', async (req, res) => {
     fs.writeFileSync(settingDb, JSON.stringify(data));
     configuration = { login: data.login, password: data.password, url: url };
     dialer.configure(configuration);
+    res.json({ status: 'udało się pomyślnie' });
 });
 
 app.get('/settings', (req, res) => {

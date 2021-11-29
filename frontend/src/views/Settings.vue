@@ -24,6 +24,9 @@
                 <label for="number">Twój numer telefonu</label>
             </div>
         </div>
+        <div v-if="saved" class="row saved">
+            <p>ZAPISANO POMYŚLNIE</p>
+        </div>
         <div class="row">
             <div class="call-button" @click="ChangeSettings()">Zapisz ustawienia</div>
         </div>
@@ -37,16 +40,19 @@ export default {
             password: '',
             number: '',
             isShowed: false,
+            saved: false,
         };
     },
     methods: {
         async ChangeSettings() {
-            fetch('http://localhost:3000/settings', {
+            await fetch('http://localhost:3000/settings', {
                 method: 'POST',
                 headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
+                    'Content-Type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({ login: this.login, password: this.password, number: this.number }),
+            }).then(() => {
+                this.saved = true;
             });
         },
         ChangeInput() {
@@ -73,5 +79,10 @@ export default {
     right: 20px;
     font-size: 2rem;
     cursor: pointer;
+}
+.saved {
+    color: green;
+    font-weight: bold;
+    font-size: 1.5rem;
 }
 </style>
