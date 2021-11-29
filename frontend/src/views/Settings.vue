@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="header clearfix">Settings</div>
+            <div class="header clearfix">Ustawienia</div>
         </div>
         <div class="row">
             <label class="form-label clearfix" for="form-login"> Login </label>
@@ -16,7 +16,7 @@
             <input v-model="number" class="form-number clearfix" id="form-number" />
         </div>
         <div class="row">
-            <div class="call-button" @click="ChangeSettings()">Save Settings</div>
+            <div class="call-button" @click="ChangeSettings()">Zapisz ustawienia</div>
         </div>
     </div>
 </template>
@@ -38,8 +38,6 @@ export default {
                 },
                 body: JSON.stringify({ login: this.login, password: this.password, number: this.number }),
             });
-
-            // this.$router.push({ name: 'start', params: { callsId: response.id } });
         },
     },
     mounted() {

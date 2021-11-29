@@ -1,5 +1,7 @@
 <template>
     <div class="window">
+        <router-link to="/">Strona Główna</router-link>
+        <router-link to="/settings">Ustawienia</router-link>
         <router-view />
     </div>
 </template>

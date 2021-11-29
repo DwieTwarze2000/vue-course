@@ -2,8 +2,8 @@ import router from '../router';
 import io from 'socket.io-client';
 class ViewManager {
     constructor() {
-        this.interval = null;
         this.status = null;
+        this.socket = null;
     }
     changeView() {
         switch (this.status) {
@@ -18,25 +18,18 @@ class ViewManager {
         }
     }
     checkStatus() {
-        io('http://localhost:3000', {
+        this.socket = io('http://localhost:3000', {
             reconnection: false,
             transports: ['websocket', 'polling'],
         });
-        this.interval = setInterval(async () => {
-            let responseStream = await fetch(`http://localhost:3000/status`, {
-                method: 'GET',
-            });
-            let response = await responseStream.json();
-            if (response.status !== this.status) {
-                this.status = response.status;
-                this.changeView();
-            }
-            this.status = response.status;
-        }, 500);
+        this.socket.on('status', (status) => {
+            this.status = status;
+            this.changeView();
+        });
     }
 
     stopPolling() {
-        clearInterval(this.interval);
+        this.socket.disconnect();
     }
 }
 

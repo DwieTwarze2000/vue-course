@@ -1,6 +1,9 @@
 const express = require('express');
-const settingsData = require('./settings.json');
 fs = require('fs');
+const path = require('path');
+const settingsFile = 'settings.json';
+const settingDb = path.join(__dirname, settingsFile);
+
 const dialer = require('dialer').Dialer;
 const bodyParser = require('body-parser');
 const app = express();
@@ -18,35 +21,38 @@ app.use((req, res, next) => {
 app.use(bodyParser.text());
 app.use(bodyParser.json());
 
+function loadSettingsData() {
+    if (fs.existsSync(settingDb)) return JSON.parse(fs.readFileSync(settingDb));
+    return [];
+}
+
 const server = app.listen(3000, function () {
     console.log('Sitecall app listening on port 3000!');
 });
 
 const io = new Server(server);
 
+let defaultConfig = loadSettingsData();
+let configuration = { login: defaultConfig.login, password: defaultConfig.password, url: url };
+dialer.configure(configuration);
 app.post('/settings', async (req, res) => {
     let data = req.body;
-    login = data.login;
-    password = data.password;
-    number = data.number.replace(/\s/g, '');
-    fs.writeFile('settings.json', `{"login":"${login}", "password":"${password}","number":"${number}"}`, (err) => {
-        if (err) return console.log(err);
-    });
+    fs.writeFileSync(settingDb, JSON.stringify(data));
+    configuration = { login: data.login, password: data.password, url: url };
+    dialer.configure(configuration);
 });
 
 app.get('/settings', (req, res) => {
+    const settingsData = loadSettingsData();
     res.json({ login: settingsData.login, password: settingsData.password, number: settingsData.number });
 });
-
-const configuration = { login: settingsData.login, password: settingsData.password, url: url };
-
-dialer.configure(configuration);
 
 let currentStatus;
 app.post('/call', async function (req, res) {
     let data = req.body;
-    _bridge = await dialer.call(settingsData.number, data.number.replace(/\s/g, ''));
-
+    let settings = loadSettingsData();
+    console.log(settings.number, data.number, configuration);
+    _bridge = await dialer.call(settings.number.replace(/\s/g, ''), data.number.replace(/\s/g, ''));
     let interval = setInterval(async () => {
         let status = await _bridge.getStatus();
         console.log({ status });

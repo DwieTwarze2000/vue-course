@@ -1,16 +1,16 @@
 # vue-course
 
-## JAK URUCHOMIĆ.
+# JAK URUCHOMIĆ.
 
-# server
+## server
 
 npm run devStart
 
-# frontend
+## frontend
 
 npm run serve
 
-## GŁÓWNE ZMIANY:
+# GŁÓWNE ZMIANY:
 
 dodano zakładkę ustawienia,
 
@@ -20,7 +20,7 @@ Wszystko można uzupełnić w zakładce ustawienia na stronie.
 
 Dane zapisywane są w pliku settings.json na serwerze (normalnie byłyby w bazie ale już nie chciałem komplikować).
 
-## MNIEJSZE ZMIANY:
+# MNIEJSZE ZMIANY:
 
 poprawa wizualna strony.
 
